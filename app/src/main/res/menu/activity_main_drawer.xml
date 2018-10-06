@@ -3,24 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_new_inventory"
-            android:icon="@drawable/ic_create_new_folder_black_24dp"
-            android:title="@string/btn_new_inventory" />
-        <item
-            android:id="@+id/nav_open_inventory"
-            android:icon="@drawable/ic_folder_black_24dp"
-            android:title="@string/btn_open_inventory" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
+    <item android:title="@string/label_inventory">
+        <menu>
+            <item
+                android:id="@+id/nav_new_inventory"
+                android:icon="@drawable/ic_create_new_folder_black_24dp"
+                android:title="@string/btn_new_inventory" />
+            <item
+                android:id="@+id/nav_open_inventory"
+                android:icon="@drawable/ic_folder_black_24dp"
+                android:title="@string/btn_open_inventory" />
+        </menu>
+    </item>
 
     <item android:title="Export">
         <menu>
