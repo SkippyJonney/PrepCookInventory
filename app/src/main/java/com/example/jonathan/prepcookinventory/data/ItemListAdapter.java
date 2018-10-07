@@ -38,6 +38,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         if(mItems != null) {
             Item current = mItems.get(position);
+            holder.itemItemView.setText(current.getName());
         } else {
             // data not ready
             holder.itemItemView.setText("No Item");
@@ -53,9 +54,9 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     // Return 0 if not initialized
     @Override
     public int getItemCount() {
-        if(mItems != null) {
+        if(mItems != null)
             return mItems.size();
-        } else return 0;
+        else return 0;
     }
 }
 

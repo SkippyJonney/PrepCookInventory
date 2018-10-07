@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private String FRAGMENT_EDIT_ITEM="50";
     private String FRAGMENT_CONTENT_MAIN="10";
 
+    // Recycler View
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +79,12 @@ public class MainActivity extends AppCompatActivity
         /**
          *  Add Recycler View Code Here
          *
-         *
+         *  -- maybe this code should go in a fragment
          */
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final ItemListAdapter adapter = new ItemListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        //final ItemListAdapter adapter = new ItemListAdapter(this);
+        //recyclerView.setAdapter(adapter);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
     }
