@@ -46,7 +46,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     }
 
 
-    void setItems(List<Item> items) {
+    public void setItems(List<Item> items) {
         mItems = items;
         notifyDataSetChanged();
     }

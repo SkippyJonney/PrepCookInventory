@@ -6,14 +6,34 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    tools:showIn="@layout/app_bar_main">
+
+    >
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hello RV Top"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:layout_editor_absoluteX="16dp"
         tools:listitem="@layout/recyclerview_item" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="17dp"
+        android:layout_marginTop="8dp"
+        android:text="Hello RV Bottom"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerview"
+        tools:layout_editor_absoluteX="37dp" />
 
 
 

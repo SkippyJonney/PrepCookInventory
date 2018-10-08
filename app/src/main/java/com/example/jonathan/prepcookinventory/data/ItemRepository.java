@@ -25,7 +25,7 @@ public class ItemRepository {
     }
 
     // Wrapper for getAllItems();
-    LiveData<List<Item>> getmAllItems() {
+    LiveData<List<Item>> getAllItems() {
         return mAllItems;
     }
 

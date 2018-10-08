@@ -7,6 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 @Database(entities = {Item.class}, version = 1)
 public abstract class ItemRoomDatabase extends RoomDatabase {
@@ -25,7 +26,6 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
                             ItemRoomDatabase.class, "item_database")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
-
                 }
             }
         }
@@ -40,6 +40,7 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
             super.onOpen(db);
             new PopulateDBAsync(INSTANCE).execute();
         }
+
     };
 
     // delete and populate database
@@ -53,11 +54,15 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
         @Override
         protected  Void doInBackground(final Void... params) {
             mDao.deleteAll();
+            Log.d("RV", "Items begin Added");
             Item item = new Item("Whole Milk", "Fridge", "Dairy","Sysco",0);
             mDao.insert(item);
             item = new Item("Ground Beef","Freezer","Meat","Teds",2);
             mDao.insert(item);
+            item = new Item("Cheese","Freezer","Meat","Teds",2);
+            mDao.insert(item);
             return null;
+
         }
     }
 

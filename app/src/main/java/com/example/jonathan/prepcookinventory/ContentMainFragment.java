@@ -1,19 +1,34 @@
 package com.example.jonathan.prepcookinventory;
 
+        import android.arch.lifecycle.Observer;
+        import android.arch.lifecycle.ViewModelProvider;
+        import android.arch.lifecycle.ViewModelProviders;
         import android.content.Context;
         import android.net.Uri;
         import android.os.Bundle;
+        import android.os.Debug;
+        import android.support.annotation.Nullable;
         import android.support.v4.app.Fragment;
         import android.support.v7.widget.RecyclerView;
         import android.support.v7.widget.LinearLayoutManager;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
 
+        import com.example.jonathan.prepcookinventory.data.Item;
         import com.example.jonathan.prepcookinventory.data.ItemListAdapter;
+        import com.example.jonathan.prepcookinventory.data.ItemViewModel;
+
+        import java.util.List;
 
 
 public class ContentMainFragment extends Fragment {
+
+
+    private ItemViewModel mItemViewModel;
+    private ItemListAdapter adapter;
+    private RecyclerView recyclerView;
 
     public ContentMainFragment() {
         // Required empty public constructor
@@ -29,6 +44,9 @@ public class ContentMainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // get view model
+        populateAdapter();
+
     }
 
     @Override
@@ -37,10 +55,18 @@ public class ContentMainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content_main, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
-        final ItemListAdapter adapter = new ItemListAdapter(this.getActivity());
+        recyclerView = view.findViewById(R.id.recyclerview);
+        adapter = new ItemListAdapter(this.getActivity());
+
+
+        //populateAdapter();
+
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
+        Log.d("RV", Long.toString(recyclerView.getAdapter().getItemId(0)));
+        Log.d("RV", "Created " + recyclerView.getAdapter().getItemCount());
 
 
         return view;
@@ -49,6 +75,23 @@ public class ContentMainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        populateAdapter();
+    }
+
+
+    // Populate adapter with observer
+    private void populateAdapter() {
+        mItemViewModel = ViewModelProviders.of(this.getActivity()).get(ItemViewModel.class);
+
+        mItemViewModel.getAllItems().observe(this, new Observer<List<Item>>(){
+            @Override
+            public void onChanged(@Nullable final List<Item> items){
+                // set adapter
+                adapter.setItems(items);
+            }
+        });
+
+        //recyclerView.setAdapter(adapter);
     }
 
 }

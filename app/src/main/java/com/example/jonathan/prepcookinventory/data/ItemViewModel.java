@@ -19,11 +19,11 @@ public class ItemViewModel extends AndroidViewModel {
         super(application);
 
         mRepository = new ItemRepository(application);
-        mAllItems = mRepository.getmAllItems();
+        mAllItems = mRepository.getAllItems();
     }
 
     // Getter for liveData that hides implementation from UI
-    LiveData<List<Item>> getmAllItems() { return mAllItems; }
+    public LiveData<List<Item>> getAllItems() { return mAllItems; }
 
     // call repository insert wrapper
     public void insert(Item item) { mRepository.insert(item); }
