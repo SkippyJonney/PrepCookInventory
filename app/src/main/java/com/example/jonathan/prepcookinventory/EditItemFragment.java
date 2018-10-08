@@ -1,29 +1,41 @@
 package com.example.jonathan.prepcookinventory;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.plus.PlusOneButton;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class EditItemFragment extends Fragment {
 
+    // Fragment Communication
+    private String ADD_KEY = "ADD";
+    private String CANCEL_KEY = "CANCEL";
 
     private OnFragmentInteractionListener mListener;
+
+    private EditText mNameView;
+    private EditText mCategoryView;
+    private EditText mLocationView;
+    private EditText mVendorView;
+    private EditText mQuantityView;
+
 
     public EditItemFragment() {
         // Required empty public constructor
     }
 
+    /*
     public static EditItemFragment newInstance() {
-        EditItemFragment fragment = new EditItemFragment();
-
-        return fragment;
+        return new EditItemFragment();
     }
+    */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,11 +44,51 @@ public class EditItemFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_item, container, false);
 
+        // Get References
+        mNameView = view.findViewById(R.id.editText_item_name);
+        mCategoryView = view.findViewById(R.id.editText_item_category);
+        mLocationView = view.findViewById(R.id.editText_item_location);
+        mVendorView = view.findViewById(R.id.editText_item_vendor);
+        mQuantityView = view.findViewById(R.id.editText_item_quantity);
+
+
+        // Setup Buttons
+        final Button buttonSubmit = view.findViewById(R.id.btn_edit_item);
+        buttonSubmit.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                // use ternary operator to set default values
+                if(!TextUtils.isEmpty(mNameView.getText().toString())) {
+
+                    String name     = mNameView.getText().toString();
+                    String location = mLocationView.getText().toString();
+                    String category = mCategoryView.getText().toString();
+                    String vendor   = mVendorView.getText().toString();
+                    String quantity = mQuantityView.getText().toString();
+
+
+                    String[] values = new String[5];
+                    values[0] = (TextUtils.isEmpty(name)) ? "no name" : name;
+                    values[1] = (TextUtils.isEmpty(location)) ? "default" : location;
+                    values[2] = (TextUtils.isEmpty(category)) ? "main" : category;
+                    values[3] = (TextUtils.isEmpty(vendor)) ? "default" : vendor;
+                    values[4] = (TextUtils.isEmpty(quantity)) ? "0" : quantity;
+
+                    mListener.editItemFragmentButton(ADD_KEY, values);
+                }
+                // else do nothing
+            }
+        });
+        final Button buttonCancel = view.findViewById(R.id.btn_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                mListener.editItemFragmentButton(CANCEL_KEY, null);
+            }
+        });
 
         return view;
     }
@@ -46,21 +98,14 @@ public class EditItemFragment extends Fragment {
         super.onResume();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+
+        try {
+            mListener = (OnFragmentInteractionListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Must implement OnFragmentInteractionListener");
         }
     }
 
@@ -70,19 +115,10 @@ public class EditItemFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void editItemFragmentButton(String action, @Nullable String[] data);
     }
 
 }

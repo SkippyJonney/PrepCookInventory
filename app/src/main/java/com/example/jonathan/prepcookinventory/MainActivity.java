@@ -1,5 +1,6 @@
 package com.example.jonathan.prepcookinventory;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +22,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jonathan.prepcookinventory.data.Item;
 import com.example.jonathan.prepcookinventory.data.ItemListAdapter;
+import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private String FRAGMENT_CONTENT_MAIN="10";
 
     // Recycler View
+    private ItemViewModel mItemViewModel;
 
 
     @Override
@@ -54,6 +59,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
         */
+
+        mItemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+        //mItemViewModel = ViewModelProviders.of(this.getActivity()).get(ItemViewModel.class);
 
         // Add Fragments
         fragmentManager = getSupportFragmentManager();
@@ -120,40 +128,11 @@ public class MainActivity extends AppCompatActivity
         }
         */
         if(id == R.id.home) {
-            //drawer.openDrawer(GravityCompat.START);
-            Fragment newFragment = fragmentManager.findFragmentByTag(FRAGMENT_CONTENT_MAIN);
-            if(newFragment == null) {
-                newFragment = new ContentMainFragment();
-                fragmentManager.beginTransaction()
-                        .add(R.id.main_framgent, newFragment, FRAGMENT_EDIT_ITEM)
-                        .addToBackStack(null)
-                        .commit();
-            } else {
-                fragmentManager.beginTransaction().replace(R.id.main_framgent, newFragment, FRAGMENT_CONTENT_MAIN)
-                        .addToBackStack(null)
-                        .commit();
-            }
-
+            swapFragments(FRAGMENT_CONTENT_MAIN);
             return true;
         }
         if(id == R.id.add_item) {
-            //Intent i = new Intent(this, edit_label.class);
-            //startActivity(i);
-
-            // Check for Existing Fragment
-            Fragment newFragment = fragmentManager.findFragmentByTag(FRAGMENT_EDIT_ITEM);
-            if(newFragment == null) {
-                EditItemFragment editItemFragment = new EditItemFragment();
-                fragmentManager.beginTransaction()
-                        .add(R.id.main_framgent, editItemFragment, FRAGMENT_EDIT_ITEM)
-                        .addToBackStack(null)
-                        .commit();
-            } else {
-                fragmentManager.beginTransaction().replace(R.id.main_framgent, newFragment, FRAGMENT_EDIT_ITEM)
-                        .addToBackStack(null)
-                        .commit();
-            }
-
+            swapFragments(FRAGMENT_EDIT_ITEM);
             return true;
         }
 
@@ -182,9 +161,44 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // Define Fragment Interactions
+    @Override
+    public void editItemFragmentButton(String action, String[] data) {
+        if( action == "ADD" ) {
+            Log.d("RV", data[0].toString() + " from fragment");
 
-    public void onFragmentInteraction(Uri uri){
+            // Add item to database
+            Item newItem = new Item(data[0], data[1], data[2], data[3], Integer.parseInt(data[4]));
+            mItemViewModel.insert(newItem);
+            // swap fragments
+            swapFragments(FRAGMENT_CONTENT_MAIN);
 
-        // do something
+        } else if( action == "CANCEL" ) {
+            Log.d("RV", "Cancel close Fragment");
+            swapFragments(FRAGMENT_CONTENT_MAIN);
+        }
     }
+
+
+    // Swap Fragments in View & Check for Existing Fragment
+    public void swapFragments(String swap_to_key) {
+
+        Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
+        if(destinationFragment == null) {
+            // create desired fragment
+            if(swap_to_key == FRAGMENT_CONTENT_MAIN) {
+                destinationFragment = new ContentMainFragment();
+            } else if(swap_to_key == FRAGMENT_EDIT_ITEM) {
+                destinationFragment = new EditItemFragment();
+            }
+        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_framgent, destinationFragment, swap_to_key)
+                .addToBackStack(null)
+                .commit();
+
+
+    }
+
+
 }

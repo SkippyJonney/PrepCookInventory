@@ -4,6 +4,7 @@ package com.example.jonathan.prepcookinventory;
         import android.arch.lifecycle.ViewModelProvider;
         import android.arch.lifecycle.ViewModelProviders;
         import android.content.Context;
+        import android.content.Intent;
         import android.net.Uri;
         import android.os.Bundle;
         import android.os.Debug;
@@ -21,6 +22,8 @@ package com.example.jonathan.prepcookinventory;
         import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 
         import java.util.List;
+
+        import static android.app.Activity.RESULT_OK;
 
 
 public class ContentMainFragment extends Fragment {
@@ -93,5 +96,6 @@ public class ContentMainFragment extends Fragment {
 
         //recyclerView.setAdapter(adapter);
     }
+
 
 }
