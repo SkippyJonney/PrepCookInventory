@@ -64,6 +64,7 @@ public class ContentMainFragment extends Fragment  {
             public void onQuantityUpdate(int id, int quantity) {
                 // do something
                 Log.d("RV", Integer.toString(id) + " " + Integer.toString(quantity));
+                mListener.onQuantityChange(id,quantity);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -106,6 +107,7 @@ public class ContentMainFragment extends Fragment  {
     public interface ItemClickListener {
         void onQuantityChange(int id, int quantity);
     }
+
 
 
 }

@@ -39,12 +39,12 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        myButtonListener.onQuantityUpdate(id, quantity++);
+                        myButtonListener.onQuantityUpdate(id, ++quantity);
                 }});
             subButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        myButtonListener.onQuantityUpdate(id, quantity--);
+                        myButtonListener.onQuantityUpdate(id, --quantity);
                 }
                 });
             }
