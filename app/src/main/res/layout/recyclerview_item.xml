@@ -36,7 +36,6 @@
             android:id="@+id/tv_item_quantity"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:hint="@string/item_quantity"
             android:windowSoftInputMode="stateHidden"
             android:gravity="center_horizontal"
             android:text="0" />

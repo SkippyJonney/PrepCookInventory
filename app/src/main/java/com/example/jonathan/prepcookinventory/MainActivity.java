@@ -28,7 +28,8 @@ import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        EditItemFragment.OnFragmentInteractionListener {
+        EditItemFragment.OnFragmentInteractionListener,
+        ContentMainFragment.ItemClickListener {
 
     private DrawerLayout drawer;
 
@@ -177,6 +178,12 @@ public class MainActivity extends AppCompatActivity
             Log.d("RV", "Cancel close Fragment");
             swapFragments(FRAGMENT_CONTENT_MAIN);
         }
+    }
+
+    @Override
+    public void onQuantityChange(int id, int quantity) {
+        // Increase quantity
+        mItemViewModel.updateQuantity(id,quantity);
     }
 
 
