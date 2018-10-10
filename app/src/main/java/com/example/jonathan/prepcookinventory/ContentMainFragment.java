@@ -54,7 +54,7 @@ public class ContentMainFragment extends Fragment  {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_content_main, container, false);
@@ -108,6 +108,14 @@ public class ContentMainFragment extends Fragment  {
         void onQuantityChange(int id, int quantity);
     }
 
+    // filter interface
+    public void filterAdapter(String query) {
+        adapter.getFilter().filter(query);
+    }
+
+    public void unFilterAdapter() {
+        adapter.cancelFilter();
+    }
 
 
 }

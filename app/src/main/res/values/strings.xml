@@ -9,8 +9,11 @@
 
 
     <!-- Menu Strings -->
+    <string name="label_inventory">Inventory</string>
     <string name="btn_new_inventory">New Inventory</string>
     <string name="btn_open_inventory">Open Inventory</string>
+    <string name="label_tools">Tools</string>
+    <string name="btn_clear_inventory">Zero Inventory</string>
     <string name="btn_export_inventory">Export Inventory</string>
 
 
@@ -20,7 +23,7 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_filter">Filter</string>
     <string name="label_home">Home</string>
-    <string name="label_inventory">Inventory</string>
+
 
     <!-- Edit Fragment Label and Defaults -->
     <string name="item_name">Item Name</string>

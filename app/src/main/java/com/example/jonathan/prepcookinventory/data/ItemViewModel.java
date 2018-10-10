@@ -30,6 +30,7 @@ public class ItemViewModel extends AndroidViewModel {
 
     // call repository insert wrapper
     public void insert(Item item) { mRepository.insert(item); }
+    public void zeroDatabase() { mRepository.zeroDatabase(0);}
 
     //call repository for update quantity
     public void updateQuantity(int id, int quantity) { mRepository.updateQuantity(id,quantity);}

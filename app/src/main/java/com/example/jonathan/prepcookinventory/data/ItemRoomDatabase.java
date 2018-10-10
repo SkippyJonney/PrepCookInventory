@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-@Database(entities = {Item.class}, version = 1)
+@Database(entities = {Item.class}, version = 1, exportSchema = false)
 public abstract class ItemRoomDatabase extends RoomDatabase {
     public abstract ItemDao itemDao();
 

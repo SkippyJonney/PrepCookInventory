@@ -1,6 +1,8 @@
 package com.example.jonathan.prepcookinventory;
 
+import android.app.SearchManager;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity
         ContentMainFragment.ItemClickListener {
 
     private DrawerLayout drawer;
+
+    private SearchView searchView;
 
     // Fragment Transactions
     private FragmentManager fragmentManager;
@@ -112,6 +117,57 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        /*
+
+        IMPLEMENT SEARCHABLE
+
+         */
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.filter_items)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        // listen to filter changes
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter adapter
+                Log.d("RV", "Query Submit");
+                ContentMainFragment fragment = (ContentMainFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_CONTENT_MAIN);
+                if( fragment != null) {
+                    // if available
+                    fragment.filterAdapter(query);
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // filter adapter ???
+                Log.d("RV", "Query Change");
+                ContentMainFragment fragment = (ContentMainFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_CONTENT_MAIN);
+                if( fragment != null) {
+                    // if available
+                    fragment.filterAdapter(newText);
+                }
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Log.d("RV", "Query Close");
+                ContentMainFragment fragment = (ContentMainFragment) getSupportFragmentManager().findFragmentByTag(FRAGMENT_CONTENT_MAIN);
+                if( fragment != null) {
+                    // if available
+                    fragment.unFilterAdapter();
+                }
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -151,9 +207,10 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_open_inventory) {
             // TODO Implement Export
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_zero) {
+            Log.d("RV", "Zero Database");
+            mItemViewModel.zeroDatabase();
+        } else if (id == R.id.nav_export) {
 
         }
 

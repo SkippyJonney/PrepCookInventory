@@ -7,14 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.jonathan.prepcookinventory.R;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder> {
+public class ItemListAdapter
+        extends RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>
+        implements Filterable {
 
     // Define View Holder with inventory button listeners
     class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +58,7 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
     // Adapter Fields
     private final LayoutInflater mInflater;
     private List<Item> mItems; // cache of items - copied
+    private List<Item> mItemsFiltered; // filtered items
     public buttonListener myButtonListener;
 
     public ItemListAdapter(Context context, buttonListener listener) {
@@ -68,8 +74,8 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        if(mItems != null) {
-            Item current = mItems.get(position);
+        if(mItemsFiltered != null) {
+            Item current = mItemsFiltered.get(position);
             holder.tv_name.setText(current.getName());
             holder.tv_cat.setText(current.getCategory());
             holder.tv_quantity.setText(Integer.toString(current.getQuantity()));
@@ -84,17 +90,59 @@ public class ItemListAdapter extends RecyclerView.Adapter<ItemListAdapter.ItemVi
 
     public void setItems(List<Item> items) {
         mItems = items;
+        mItemsFiltered = mItems;
         notifyDataSetChanged();
     }
 
     // Return 0 if not initialized
     @Override
     public int getItemCount() {
-        if(mItems != null)
-            return mItems.size();
+        if(mItemsFiltered != null)
+            return mItemsFiltered.size();
         else return 0;
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                Log.d("RV", "Filtering");
+                if ( charString.isEmpty()) {
+                    mItemsFiltered = mItems;
+                    Log.d("RV", "empty query");
+                } else {
+                    List<Item> filteredList = new ArrayList<>();
+                    for( Item row : mItems) {
+
+                        // match condition
+                        if(row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+                    mItemsFiltered = filteredList;
+                    Log.d("RV", "Found " + Integer.toString(filteredList.size()));
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mItemsFiltered;
+                return filterResults;
+            }
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mItemsFiltered = (ArrayList<Item>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+
+    }
+
+    public void cancelFilter() {
+        // un-filter by swapping to original
+        mItemsFiltered = mItems;
+        notifyDataSetChanged();
+    }
 
     public interface buttonListener {
         void onQuantityUpdate(int id,int quantity);

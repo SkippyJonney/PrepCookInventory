@@ -23,5 +23,9 @@ public interface ItemDao {
     @Query("UPDATE item_table SET quantity=:quantity WHERE id = :id")
     void updateQuantity(int id, int quantity);
 
+    @Query("UPDATE item_table SET quantity = :quantity")
+    void zeroDatabase(int quantity);
+
+
 
 }
