@@ -17,20 +17,27 @@ import java.util.List;
 public class ItemRepository {
     private ItemDao mItemDao;
     private LiveData<List<Item>> mAllItems;
+    private LiveData<List<String>> mLocations;
+    private LiveData<List<String>> mCategories;
 
-    ItemRepository(Application application) {
+    ItemRepository(Application application, int orderID) {
         ItemRoomDatabase db = ItemRoomDatabase.getDatabase(application);
         mItemDao = db.itemDao();
-        mAllItems = mItemDao.getAllItems();
+        mAllItems = mItemDao.getAllItems(orderID);
+        mLocations = mItemDao.getLocations(orderID);
+        mCategories = mItemDao.getCategories(orderID);
     }
 
-    // Wrapper for getAllItems();
-    LiveData<List<Item>> getAllItems() {
+    /*
+        Wrappers for SQL statements
+     */
+    LiveData<List<Item>> getAllItems(int orderID) {
         return mAllItems;
     }
-    // Wrapper for updateQuantity();
-    public void updateQuantity(int id, int quantity) { new updateQuantityAsyncTask(mItemDao).execute(id,quantity);}
-    public void zeroDatabase(int quantity) { new zeroDatabaseAsyncTask(mItemDao).execute();}
+    LiveData<List<String>> getCategories(int orderID) { return mCategories; }
+    LiveData<List<String>> getLocations(int orderID) { return mLocations; }
+    public void updateQuantity(int id, int quantity,int orderID) { new updateQuantityAsyncTask(mItemDao).execute(id,quantity, orderID);}
+    public void zeroDatabase(int quantity,int orderID) { new zeroDatabaseAsyncTask(mItemDao).execute(orderID);}
     public void insert(Item item) {
         new insertAsyncTask(mItemDao).execute(item);
     }
@@ -45,7 +52,7 @@ public class ItemRepository {
 
         @Override
         protected Void doInBackground(final Integer...params) {
-            mAsyncItemDao.updateQuantity(params[0], params[1]);
+            mAsyncItemDao.updateQuantity(params[0], params[1], params[2]);
             return null;
         }
 
@@ -61,7 +68,7 @@ public class ItemRepository {
 
         @Override
         protected Void doInBackground(final Integer...params) {
-            mAsyncItemDao.zeroDatabase(0);
+            mAsyncItemDao.zeroDatabase(0, params[0]);
             return null;
         }
 

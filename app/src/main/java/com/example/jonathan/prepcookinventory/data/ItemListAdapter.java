@@ -58,12 +58,16 @@ public class ItemListAdapter
     // Adapter Fields
     private final LayoutInflater mInflater;
     private List<Item> mItems; // cache of items - copied
+    private List<String> mLocations;
+    private List<String> mCategories;
     private List<Item> mItemsFiltered; // filtered items
     public buttonListener myButtonListener;
 
     public ItemListAdapter(Context context, buttonListener listener) {
         mInflater = LayoutInflater.from(context);
         myButtonListener = listener;
+        mLocations = new ArrayList<>();
+        mCategories = new ArrayList<>();
     }
 
     @Override
@@ -92,6 +96,16 @@ public class ItemListAdapter
         mItems = items;
         mItemsFiltered = mItems;
         notifyDataSetChanged();
+
+        for(Item item : mItems) {
+            if(!mLocations.contains(item.getLocation())) {
+                mLocations.add(item.getLocation());
+            }
+            if(!mCategories.contains(item.getCategory())) {
+                mCategories.add(item.getCategory());
+            }
+        }
+
     }
 
     // Return 0 if not initialized
@@ -109,18 +123,34 @@ public class ItemListAdapter
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 Log.d("RV", "Filtering");
-                if ( charString.isEmpty()) {
+                if (charString.isEmpty()) {
                     mItemsFiltered = mItems;
                     Log.d("RV", "empty query");
-                } else {
+                } else if (charString.toLowerCase().contains("filter")) {
+                    mItemsFiltered = mItems;
+                } else  {
                     List<Item> filteredList = new ArrayList<>();
-                    for( Item row : mItems) {
+                    // Check if we are filtering Location || Category
+                    if(mLocations.contains(charString)) {
+                        for(Item row : mItems) {
+                            if(row.getLocation().toLowerCase().contains(charString.toLowerCase()))
+                                filteredList.add(row);
+                        }
+                    } else if ( mCategories.contains(charString)) {
+                        for(Item row : mItems) {
+                            if(row.getCategory().contains(charString))
+                                filteredList.add(row);
+                        }
+                    } else {
+                        for (Item row : mItems) {
 
-                        // match condition
-                        if(row.getName().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(row);
+                            // match condition
+                            if (row.getName().toLowerCase().contains(charString.toLowerCase())) {
+                                filteredList.add(row);
+                            }
                         }
                     }
+
                     mItemsFiltered = filteredList;
                     Log.d("RV", "Found " + Integer.toString(filteredList.size()));
                 }

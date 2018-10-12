@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-@Database(entities = {Item.class}, version = 1, exportSchema = false)
+@Database(entities = {Item.class}, version = 3, exportSchema = false)
 public abstract class ItemRoomDatabase extends RoomDatabase {
     public abstract ItemDao itemDao();
 
@@ -24,6 +24,7 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
                     // Create Database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             ItemRoomDatabase.class, "item_database")
+                            .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
@@ -39,6 +40,7 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             new PopulateDBAsync(INSTANCE).execute();
+            Log.d("RV", "Populating Async Database");
         }
 
     };
@@ -53,13 +55,13 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
 
         @Override
         protected  Void doInBackground(final Void... params) {
-            //mDao.deleteAll();
-            Log.d("RV", "Items begin Added");
-            Item item = new Item("Whole Milk", "Fridge", "Dairy","Sysco",0);
+            //mDao.deleteAll(725);
+            Log.d("RV", "Items being Added");
+            Item item = new Item(725,"Whole Milk", "Fridge", "Dairy","Sysco",0);
             mDao.insert(item);
-            item = new Item("Ground Beef","Freezer","Meat","Teds",2);
+            item = new Item(725,"Ground Beef","Freezer","Meat","Teds",2);
             mDao.insert(item);
-            item = new Item("Cheese","Freezer","Meat","Teds",2);
+            item = new Item(725,"Cheese","Freezer","Meat","Teds",2);
             mDao.insert(item);
             return null;
 

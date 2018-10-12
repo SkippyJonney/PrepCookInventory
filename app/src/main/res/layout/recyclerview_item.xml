@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_size"
     android:orientation="horizontal"
-    android:background="@android:color/background_light">
+    android:background="@android:color/background_light"
+    android:elevation="4dp">
 
     <TextView
         android:id="@+id/tv_item_category"
@@ -28,6 +29,7 @@
         android:layout_height="match_parent"
         android:text="+" />
 
+    <!-- Maybe Future Implementation
     <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
@@ -40,6 +42,14 @@
             android:gravity="center_horizontal"
             android:text="0" />
     </android.support.design.widget.TextInputLayout>
+    -->
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_item_quantity"
+        android:gravity="center_horizontal"
+        android:text="0" />
 
 
     <android.support.v7.widget.AppCompatButton

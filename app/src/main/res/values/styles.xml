@@ -38,7 +38,9 @@
     <!-- Accent Search Icon -->
     <style name="AppTheme.Toolbar" parent="AppTheme">
         <item name="android:textColorSecondary">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="android:searchIcon">@drawable/ic_filter_list_black_24dp</item>
+        <item name="android:searchButtonText">Hello</item>
     </style>
 
 </resources>

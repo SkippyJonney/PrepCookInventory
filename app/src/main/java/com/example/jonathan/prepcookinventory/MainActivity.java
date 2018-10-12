@@ -1,11 +1,14 @@
 package com.example.jonathan.prepcookinventory;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -24,15 +27,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.example.jonathan.prepcookinventory.data.CustomViewModelFactory;
 import com.example.jonathan.prepcookinventory.data.Item;
 import com.example.jonathan.prepcookinventory.data.ItemListAdapter;
 import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         EditItemFragment.OnFragmentInteractionListener,
-        ContentMainFragment.ItemClickListener {
+        ContentMainFragment.ItemClickListener,
+        AdapterView.OnItemSelectedListener {
 
     private DrawerLayout drawer;
 
@@ -46,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     // Recycler View
     private ItemViewModel mItemViewModel;
 
+    private final int TEST_ORDER_ID = 725;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Inventory");
+        getSupportActionBar().setTitle(Integer.toString(TEST_ORDER_ID));
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -66,16 +80,14 @@ public class MainActivity extends AppCompatActivity
         });
         */
 
-        mItemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-        //mItemViewModel = ViewModelProviders.of(this.getActivity()).get(ItemViewModel.class);
+        mItemViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), TEST_ORDER_ID)).get(ItemViewModel.class);
 
         // Add Fragments
         fragmentManager = getSupportFragmentManager();
-        ContentMainFragment contentMainFragment = new ContentMainFragment();
+        ContentMainFragment contentMainFragment = ContentMainFragment.newInstance(TEST_ORDER_ID);
         fragmentManager.beginTransaction()
                 .add(R.id.main_framgent, contentMainFragment, FRAGMENT_CONTENT_MAIN)
                 .commit();
-
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -85,21 +97,10 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         // start with drawer open
-        drawer.openDrawer(GravityCompat.START);
+        //drawer.openDrawer(GravityCompat.START);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        /**
-         *  Add Recycler View Code Here
-         *
-         *  -- maybe this code should go in a fragment
-         */
-        //RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        //final ItemListAdapter adapter = new ItemListAdapter(this);
-        //recyclerView.setAdapter(adapter);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
     }
 
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity
 
          */
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.filter_items)
+        searchView = (SearchView) menu.findItem(R.id.search_items)
                 .getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
@@ -168,7 +169,19 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String label = parent.getItemAtPosition(position).toString();
+
+        Toast.makeText(parent.getContext(), "You Have " + label, Toast.LENGTH_LONG).show();
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // Do nothing!!
     }
 
     @Override
@@ -209,7 +222,7 @@ public class MainActivity extends AppCompatActivity
             // TODO Implement Export
         } else if (id == R.id.nav_zero) {
             Log.d("RV", "Zero Database");
-            mItemViewModel.zeroDatabase();
+            mItemViewModel.zeroDatabase(TEST_ORDER_ID);
         } else if (id == R.id.nav_export) {
 
         }
@@ -226,7 +239,7 @@ public class MainActivity extends AppCompatActivity
             Log.d("RV", data[0].toString() + " from fragment");
 
             // Add item to database
-            Item newItem = new Item(data[0], data[1], data[2], data[3], Integer.parseInt(data[4]));
+            Item newItem = new Item(TEST_ORDER_ID, data[0], data[1], data[2], data[3], Integer.parseInt(data[4]));
             mItemViewModel.insert(newItem);
             // swap fragments
             swapFragments(FRAGMENT_CONTENT_MAIN);
@@ -238,9 +251,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onQuantityChange(int id, int quantity) {
+    public void onQuantityChange(int id, int quantity, int orderID) {
         // Increase quantity
-        mItemViewModel.updateQuantity(id,quantity);
+        mItemViewModel.updateQuantity(id,quantity,orderID);
     }
 
 

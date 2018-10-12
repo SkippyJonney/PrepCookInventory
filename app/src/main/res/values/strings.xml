@@ -16,6 +16,8 @@
     <string name="btn_clear_inventory">Zero Inventory</string>
     <string name="btn_export_inventory">Export Inventory</string>
 
+    <string name="label_filter_location">Location Filter</string>
+
 
     <!-- Label Strings -->
     <string name="label_add_item">Add Item</string>

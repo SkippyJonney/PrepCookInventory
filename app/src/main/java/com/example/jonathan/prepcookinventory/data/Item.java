@@ -9,7 +9,7 @@ public class Item {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
+    private int orderID;
     private String name;
     private String location;
     private String category;
@@ -17,12 +17,14 @@ public class Item {
     private int quantity;
 
     // Constructor
-    public Item(@NonNull String name,
+    public Item(int orderID,
+                @NonNull String name,
                 @NonNull String location,
                 @NonNull String category,
                 @NonNull String vendor,
-                @NonNull int quantity )
+                int quantity )
     {
+        this.orderID = orderID;
         this.name = name;
         this.location = location;
         this.category = category;
@@ -32,6 +34,7 @@ public class Item {
 
     // Accessors
     public int getId() { return id; }
+    public int getOrderID() { return orderID; }
     public String getName() { return name; }
     public String getLocation() { return location;}
     public String getCategory() { return category; }
@@ -39,14 +42,13 @@ public class Item {
     public int getQuantity() { return quantity; }
 
     public void setId(int id) { this.id = id; }
+    public void setOrderID(int orderID) { this.orderID = orderID; }
     public void setName(String name) { this.name = name; }
     public void setLocation(String location) { this.location = location; }
     public void setCategory(String category) { this.category = category;}
     public void setVendor(String vendor) { this.vendor = vendor;}
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public void quantityIncrement(int inc) { this.quantity += inc; };
-    public void quantityDecrement(int dec) { this.quantity -= dec; };
 
 
 
