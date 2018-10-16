@@ -15,4 +15,10 @@ public interface OrderDao {
 
     @Query("SELECT * FROM order_table")
     LiveData<List<Order>> getAllOrders();
+
+    @Query("DELETE FROM order_table WHERE orderName=:name")
+    void deleteOrder(String name);
+
+    @Query("DELETE FROM order_table")
+    void deleteAllOrders();
 }

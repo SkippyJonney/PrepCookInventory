@@ -15,7 +15,10 @@ public interface ItemDao {
     void insert(Item item);
 
     @Query("DELETE FROM item_table WHERE orderID=:orderID")
-    void deleteAll(int orderID);
+    void deleteAllItems(int orderID);
+
+    @Query("DELETE FROM item_table")
+    void deleteAll();
 
     @Query("SELECT * from item_table WHERE orderID=:orderID")
     LiveData<List<Item>> getAllItems(int orderID);

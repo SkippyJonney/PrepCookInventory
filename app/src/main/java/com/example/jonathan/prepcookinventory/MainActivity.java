@@ -36,6 +36,8 @@ import com.example.jonathan.prepcookinventory.data.CustomViewModelFactory;
 import com.example.jonathan.prepcookinventory.data.Item;
 import com.example.jonathan.prepcookinventory.data.ItemListAdapter;
 import com.example.jonathan.prepcookinventory.data.ItemViewModel;
+import com.example.jonathan.prepcookinventory.data.Order;
+import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -43,9 +45,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        EditItemFragment.OnFragmentInteractionListener,
+        OnFragmentActionListener,
         ContentMainFragment.ItemClickListener,
-        AdapterView.OnItemSelectedListener {
+        AdapterView.OnItemSelectedListener,
+        SelectOrderFragment.OnListFragmentInteractionListener {
 
     private DrawerLayout drawer;
 
@@ -55,15 +58,25 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private String FRAGMENT_EDIT_ITEM="50";
     private String FRAGMENT_CONTENT_MAIN="10";
+    private String FRAGMENT_EDIT_ORDER="42";
+    private String FRAGMENT_SELECT_ORDER="20";
 
     // Recycler View
     private ItemViewModel mItemViewModel;
 
-    private final int TEST_ORDER_ID = 725;
+    private int TEST_ORDER_ID = 725;
+    private String ORDER_ID = "ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get Order ID
+        if(savedInstanceState != null) {
+            TEST_ORDER_ID = savedInstanceState.getInt(ORDER_ID);
+        }
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         */
 
         mItemViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), TEST_ORDER_ID)).get(ItemViewModel.class);
+
 
         // Add Fragments
         fragmentManager = getSupportFragmentManager();
@@ -217,11 +231,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_new_inventory) {
-            // Handle the camera action
+            swapFragments(FRAGMENT_EDIT_ORDER);
         } else if (id == R.id.nav_open_inventory) {
-            // TODO Implement Export
+            swapFragments(FRAGMENT_SELECT_ORDER);
         } else if (id == R.id.nav_zero) {
-            Log.d("RV", "Zero Database");
             mItemViewModel.zeroDatabase(TEST_ORDER_ID);
         } else if (id == R.id.nav_export) {
 
@@ -234,19 +247,28 @@ public class MainActivity extends AppCompatActivity
 
     // Define Fragment Interactions
     @Override
-    public void editItemFragmentButton(String action, String[] data) {
-        if( action == "ADD" ) {
-            Log.d("RV", data[0].toString() + " from fragment");
+    public void fragmentButtons(String action, String[] data) {
 
-            // Add item to database
-            Item newItem = new Item(TEST_ORDER_ID, data[0], data[1], data[2], data[3], Integer.parseInt(data[4]));
-            mItemViewModel.insert(newItem);
-            // swap fragments
-            swapFragments(FRAGMENT_CONTENT_MAIN);
-
-        } else if( action == "CANCEL" ) {
-            Log.d("RV", "Cancel close Fragment");
-            swapFragments(FRAGMENT_CONTENT_MAIN);
+        switch(action) {
+            case "ITEM_ADD":
+                // Add item to database
+                Item newItem = new Item(TEST_ORDER_ID, data[0], data[1], data[2], data[3], Integer.parseInt(data[4]));
+                mItemViewModel.insert(newItem);
+                // swap fragments
+                swapFragments(FRAGMENT_CONTENT_MAIN);
+                break;
+            case "ORDER_ADD":
+                Order newOrder = new Order(data[1], data[0]);
+                mItemViewModel.insert(newOrder);
+                // gracefully waterfall to cancel
+                // no break
+                TEST_ORDER_ID = newOrder.getOrderID();
+                mItemViewModel.setOrderId(newOrder.getOrderID());
+                this.recreate();
+            case "CANCEL":
+                swapFragments(FRAGMENT_CONTENT_MAIN);
+            default:
+                break;
         }
     }
 
@@ -254,6 +276,17 @@ public class MainActivity extends AppCompatActivity
     public void onQuantityChange(int id, int quantity, int orderID) {
         // Increase quantity
         mItemViewModel.updateQuantity(id,quantity,orderID);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Order order) {
+        // Set Order ID
+        TEST_ORDER_ID = order.getOrderID();
+        // Refresh data
+        //swapFragments(FRAGMENT_CONTENT_MAIN);
+        //clearStack();
+        mItemViewModel.setOrderId(TEST_ORDER_ID);
+        this.recreate();
     }
 
 
@@ -264,10 +297,16 @@ public class MainActivity extends AppCompatActivity
         if(destinationFragment == null) {
             // create desired fragment
             if(swap_to_key == FRAGMENT_CONTENT_MAIN) {
-                destinationFragment = new ContentMainFragment();
+                destinationFragment = ContentMainFragment.newInstance(TEST_ORDER_ID);
             } else if(swap_to_key == FRAGMENT_EDIT_ITEM) {
                 destinationFragment = new EditItemFragment();
+            } else if(swap_to_key == FRAGMENT_EDIT_ORDER) {
+                destinationFragment = new EditOrderFragment();
+            }  else if(swap_to_key == FRAGMENT_SELECT_ORDER) {
+                destinationFragment = new SelectOrderFragment();
             }
+
+            // TODO ENSURE NO NULL FRAGMENT
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.main_framgent, destinationFragment, swap_to_key)
@@ -277,5 +316,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    // Save and Restore Order ID
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putInt(ORDER_ID,TEST_ORDER_ID);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        TEST_ORDER_ID = state.getInt(ORDER_ID);
+    }
 
 }

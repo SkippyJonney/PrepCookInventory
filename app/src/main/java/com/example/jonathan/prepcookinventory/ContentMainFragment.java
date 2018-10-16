@@ -52,6 +52,8 @@ public class ContentMainFragment extends Fragment implements AdapterView.OnItemS
         return fragment;
     }
     */
+    public ContentMainFragment() {}
+
     public static ContentMainFragment newInstance(int orderID) {
         Bundle bundle = new Bundle();
         bundle.putInt("orderID", orderID);

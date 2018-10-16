@@ -4,6 +4,7 @@ package com.example.jonathan.prepcookinventory.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 
@@ -16,13 +17,16 @@ import java.util.List;
  */
 public class ItemRepository {
     private ItemDao mItemDao;
+    private OrderDao mOrderDao;
     private LiveData<List<Item>> mAllItems;
     private LiveData<List<String>> mLocations;
     private LiveData<List<String>> mCategories;
+    private LiveData<List<Order>> mAllOrders;
 
     ItemRepository(Application application, int orderID) {
         ItemRoomDatabase db = ItemRoomDatabase.getDatabase(application);
         mItemDao = db.itemDao();
+        mOrderDao = db.orderDao();
         mAllItems = mItemDao.getAllItems(orderID);
         mLocations = mItemDao.getLocations(orderID);
         mCategories = mItemDao.getCategories(orderID);
@@ -31,16 +35,20 @@ public class ItemRepository {
     /*
         Wrappers for SQL statements
      */
-    LiveData<List<Item>> getAllItems(int orderID) {
-        return mAllItems;
+    LiveData<List<Order>> getAllOrders() {
+        return mOrderDao.getAllOrders();
     }
-    LiveData<List<String>> getCategories(int orderID) { return mCategories; }
-    LiveData<List<String>> getLocations(int orderID) { return mLocations; }
+    LiveData<List<Item>> getAllItems(int orderID) {
+        return mItemDao.getAllItems(orderID);
+    }
+    LiveData<List<String>> getCategories(int orderID) { return mItemDao.getCategories(orderID); }
+    LiveData<List<String>> getLocations(int orderID) { return mItemDao.getLocations(orderID); }
     public void updateQuantity(int id, int quantity,int orderID) { new updateQuantityAsyncTask(mItemDao).execute(id,quantity, orderID);}
     public void zeroDatabase(int quantity,int orderID) { new zeroDatabaseAsyncTask(mItemDao).execute(orderID);}
     public void insert(Item item) {
         new insertAsyncTask(mItemDao).execute(item);
     }
+    public void insertOrder(Order order) { new insertAsyncOrder(mOrderDao).execute(order); }
 
     // Async to Update quantity
     private static class updateQuantityAsyncTask extends AsyncTask<Integer, Void, Void> {
@@ -88,5 +96,18 @@ public class ItemRepository {
             return null;
         }
     }
+
+    private static class insertAsyncOrder extends AsyncTask<Order, Void, Void> {
+        private OrderDao mAsyncOrderDao;
+
+        insertAsyncOrder(OrderDao dao) { mAsyncOrderDao = dao; }
+
+        @Override
+        protected Void doInBackground(final Order... params) {
+            mAsyncOrderDao.insert(params[0]);
+            return null;
+        }
+    }
+
 
 }

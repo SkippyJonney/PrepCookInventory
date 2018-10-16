@@ -12,13 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
+
 public class EditItemFragment extends Fragment {
 
     // Fragment Communication
-    private String ADD_KEY = "ADD";
+    private String ADD_KEY = "ITEM_ADD";
     private String CANCEL_KEY = "CANCEL";
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentActionListener mListener;
 
     private EditText mNameView;
     private EditText mCategoryView;
@@ -58,7 +60,7 @@ public class EditItemFragment extends Fragment {
 
 
         // Setup Buttons
-        final Button buttonSubmit = view.findViewById(R.id.btn_edit_item);
+        final Button buttonSubmit = view.findViewById(R.id.btn_edit_order);
         buttonSubmit.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 // use ternary operator to set default values
@@ -78,7 +80,7 @@ public class EditItemFragment extends Fragment {
                     values[3] = (TextUtils.isEmpty(vendor)) ? "default" : vendor;
                     values[4] = (TextUtils.isEmpty(quantity)) ? "0" : quantity;
 
-                    mListener.editItemFragmentButton(ADD_KEY, values);
+                    mListener.fragmentButtons(ADD_KEY, values);
                 }
                 // else do nothing
             }
@@ -86,7 +88,7 @@ public class EditItemFragment extends Fragment {
         final Button buttonCancel = view.findViewById(R.id.btn_cancel);
         buttonCancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                mListener.editItemFragmentButton(CANCEL_KEY, null);
+                mListener.fragmentButtons(CANCEL_KEY, null);
             }
         });
 
@@ -103,7 +105,7 @@ public class EditItemFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            mListener = (OnFragmentInteractionListener) getActivity();
+            mListener = (OnFragmentActionListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Must implement OnFragmentInteractionListener");
         }
@@ -113,12 +115,6 @@ public class EditItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void editItemFragmentButton(String action, @Nullable String[] data);
     }
 
 }

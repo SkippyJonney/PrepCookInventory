@@ -25,6 +25,9 @@
     <string name="label_cancel">Cancel</string>
     <string name="label_filter">Filter</string>
     <string name="label_home">Home</string>
+    <string name="label_edit_order">Edit Inventory</string>
+    <string name="label_add_order">Add Inventory</string>
+
 
 
     <!-- Edit Fragment Label and Defaults -->
@@ -35,6 +38,9 @@
     <string name="item_quantity_default">0</string>
     <string name="item_vendor">Preferred Vendor</string>
     <string name="title_activity_edit_label">edit_label</string>
+    <string name="order_name">Inventory Name</string>
+    <string name="order_date">Inventory Date</string>
+
 
 
     <!-- Editor Strings -->

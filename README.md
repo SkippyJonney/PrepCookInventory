@@ -12,3 +12,6 @@ https://gunhansancar.com/best-practice-to-instantiate-fragments-with-arguments-i
 
 Instantiate View Model with Arguments
 https://stackoverflow.com/questions/46283981/android-viewmodel-additional-arguments
+
+Clear Fragment Backstack
+https://readyandroid.wordpress.com/remove-fragment-with-clear-back-stack/
