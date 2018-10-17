@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.example.jonathan.prepcookinventory.data.CustomViewModelFactory;
 import com.example.jonathan.prepcookinventory.data.Item;
 import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 import com.example.jonathan.prepcookinventory.data.Order;
+import com.example.jonathan.prepcookinventory.ui.InventoryWidget;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -325,10 +327,21 @@ public class MainActivity extends AppCompatActivity
                 mCurrOrder = order;
                 if( order != null) {
                     getSupportActionBar().setTitle(order.getOrderTitle());
+                    updateWidget(order.getOrderTitle());
                 }
             }
         });
 
+    }
+
+
+    public void updateWidget(String widgetText) {
+        // Send ingredient string to widget.
+        Intent widgetIntent = new Intent(this, InventoryWidget.class);
+        widgetIntent.setAction("UPDATE");
+        widgetIntent.putExtra("update", widgetText);
+        sendBroadcast(widgetIntent);
+        Log.d("<><><><><>", "broadcasting");
     }
 
 }

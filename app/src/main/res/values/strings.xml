@@ -42,6 +42,8 @@
     <string name="order_date">Inventory Date</string>
 
 
+    <!-- App Widget -->
+    <string name="widget_name">Inventory Widget</string>
 
     <!-- Editor Strings -->
     <string name="NA">N/A</string>
