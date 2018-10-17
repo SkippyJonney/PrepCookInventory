@@ -30,6 +30,9 @@ import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 import com.example.jonathan.prepcookinventory.data.Order;
 import com.example.jonathan.prepcookinventory.ui.InventoryWidget;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity
@@ -52,12 +55,15 @@ public class MainActivity extends AppCompatActivity
     private int TEST_ORDER_ID = 725;
     private String ORDER_ID = "ID";
 
-    // Analytics
+    // Analytics && Ads
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Mobile Ads
+        MobileAds.initialize(this, BuildConfig.ADMOB_APP_ID);
 
         // Get Order ID
         if(savedInstanceState != null) {
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         // Init Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
         mItemViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), TEST_ORDER_ID)).get(ItemViewModel.class);
         UpdateTitle();

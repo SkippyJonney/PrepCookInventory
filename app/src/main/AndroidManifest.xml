@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.APPLICATION_ID"
-            android:value="[ADMOB_APP_ID]" />
+            android:value="ADMOB_APP_ID"  />
 
         <activity
             android:name=".MainActivity"

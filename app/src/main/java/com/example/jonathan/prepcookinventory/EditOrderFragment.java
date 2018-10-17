@@ -13,6 +13,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.Date;
 
@@ -32,6 +35,7 @@ public class EditOrderFragment extends Fragment {
 
     private EditText mOrderName;
     private DatePicker mDatePicker;
+    private AdView mAdView;
 
 
     @Override
@@ -69,6 +73,12 @@ public class EditOrderFragment extends Fragment {
                 mListener.fragmentButtons(CANCEL_KEY, null);
             }
         });
+
+
+        // Implement Ads
+        mAdView = view.findViewById(R.id.adView_edit_order_banner);
+        AdRequest BannerRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(BannerRequest);
 
 
         return view;
