@@ -34,7 +34,6 @@ dependencies {
 
     // Firebase Analytics
     implementation 'com.google.firebase:firebase-core:16.0.4'
-
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
 
     // Room Includes
@@ -44,6 +43,9 @@ dependencies {
     // Room --> Lifecycle
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+
+    // CVS File Creator/Reader
+    implementation 'de.siegmar:fastcsv:1.0.3'
 
 }
 

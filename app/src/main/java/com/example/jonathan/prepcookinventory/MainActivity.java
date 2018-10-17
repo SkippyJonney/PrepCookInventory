@@ -30,10 +30,13 @@ import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 import com.example.jonathan.prepcookinventory.data.Order;
 import com.example.jonathan.prepcookinventory.ui.InventoryWidget;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
+import com.example.jonathan.prepcookinventory.utils.CVShelper;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -233,7 +236,9 @@ public class MainActivity extends AppCompatActivity
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         } else if (id == R.id.nav_export) {
-
+            CVShelper helper = new CVShelper(this, mItemViewModel.exportItems(), mItemViewModel.exportOrders());
+            File file = helper.getCvsExport();
+            Log.d("RV", file.toString());
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

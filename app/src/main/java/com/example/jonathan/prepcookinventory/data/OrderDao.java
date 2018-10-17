@@ -16,6 +16,9 @@ public interface OrderDao {
     @Query("SELECT * FROM order_table")
     LiveData<List<Order>> getAllOrders();
 
+    @Query("SELECT * FROM order_table")
+    List<Order> exportOrders();
+
     @Query("DELETE FROM order_table WHERE orderName=:name")
     void deleteOrder(String name);
 

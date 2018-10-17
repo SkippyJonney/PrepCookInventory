@@ -18,6 +18,7 @@ public class ItemViewModel extends AndroidViewModel {
     private LiveData<List<Item>> mAllItems;
     private LiveData<List<String>> mLocations;
     private LiveData<List<String>> mCategories;
+    private List<Item> mItemsExport;
     private LiveData<List<Order>> mOrders;
 
     private int mORDER_ID = 0;
@@ -28,6 +29,8 @@ public class ItemViewModel extends AndroidViewModel {
         mORDER_ID = orderID;
         mRepository = new ItemRepository(application,orderID);
         mOrders = mRepository.getAllOrders();
+        //mAllItems = mRepository.exportItems();
+        mItemsExport = mRepository.exportItems();
 }
 
     // Getter for liveData that hides implementation from UI
@@ -44,7 +47,8 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Order>> getmOrders() { return mOrders; }
-
+    public List<Item> exportItems() { return mRepository.exportItems(); }
+    public List<Order> exportOrders() { return mRepository.exportOrders(); }
     public LiveData<Order> getOrderById(int id) { return mRepository.getOrderById(id); }
 
     // call repository insert wrapper

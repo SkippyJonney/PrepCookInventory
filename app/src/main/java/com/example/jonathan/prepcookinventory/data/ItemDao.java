@@ -20,6 +20,9 @@ public interface ItemDao {
     @Query("DELETE FROM item_table")
     void deleteAll();
 
+    @Query("SELECT * FROM item_table")
+    List<Item> exportItems();
+
     @Query("SELECT * from item_table WHERE orderID=:orderID")
     LiveData<List<Item>> getAllItems(int orderID);
 

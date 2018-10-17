@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  *  REPOSITORY - NOT BEING USED -- :)
@@ -38,6 +39,26 @@ public class ItemRepository {
     LiveData<List<Order>> getAllOrders() {
         return mOrderDao.getAllOrders();
     }
+    List<Item> exportItems() {
+        List<Item> items;
+        try {
+            items = new getItemsAsyncTask(mItemDao).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            items = null;
+        }
+        return items;
+    }
+    List<Order> exportOrders() {
+        List<Order> orders;
+        try {
+            orders = new getOrdersAsyncTask(mOrderDao).execute().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            orders = null;
+        }
+        return orders;
+    }
     LiveData<List<Item>> getAllItems(int orderID) {
         return mItemDao.getAllItems(orderID);
     }
@@ -50,6 +71,28 @@ public class ItemRepository {
     }
     public void insertOrder(Order order) { new insertAsyncOrder(mOrderDao).execute(order); }
     LiveData<Order> getOrderById(int id) { return mOrderDao.getById(id); }
+
+
+    // Async Get Items
+    private static class getItemsAsyncTask extends AsyncTask<Void,Void,List<Item>> {
+        private ItemDao mAsyncItemDao;
+        getItemsAsyncTask(ItemDao dao) { this.mAsyncItemDao = dao; }
+
+        @Override
+        protected List<Item> doInBackground(Void... voids) {
+            return mAsyncItemDao.exportItems();
+        }
+    }
+    // Async Get Orders
+    private static class getOrdersAsyncTask extends AsyncTask<Void,Void,List<Order>> {
+        private OrderDao mAsyncOrderDao;
+        getOrdersAsyncTask(OrderDao dao) { this.mAsyncOrderDao = dao;}
+
+        @Override
+        protected List<Order> doInBackground(Void... voids) {
+            return mAsyncOrderDao.exportOrders();
+        }
+    }
 
 
     // Async to Update quantity
