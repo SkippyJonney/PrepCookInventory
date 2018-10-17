@@ -1,20 +1,13 @@
 package com.example.jonathan.prepcookinventory;
 
 import android.app.SearchManager;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -28,20 +21,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.jonathan.prepcookinventory.data.CustomViewModelFactory;
 import com.example.jonathan.prepcookinventory.data.Item;
-import com.example.jonathan.prepcookinventory.data.ItemListAdapter;
 import com.example.jonathan.prepcookinventory.data.ItemViewModel;
 import com.example.jonathan.prepcookinventory.data.Order;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -49,10 +36,6 @@ public class MainActivity extends AppCompatActivity
         ContentMainFragment.ItemClickListener,
         AdapterView.OnItemSelectedListener,
         SelectOrderFragment.OnListFragmentInteractionListener {
-
-    private DrawerLayout drawer;
-
-    private SearchView searchView;
 
     // Fragment Transactions
     private FragmentManager fragmentManager;
@@ -63,9 +46,12 @@ public class MainActivity extends AppCompatActivity
 
     // Recycler View
     private ItemViewModel mItemViewModel;
-
+    private Order mCurrOrder;
     private int TEST_ORDER_ID = 725;
     private String ORDER_ID = "ID";
+
+    // Analytics
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,23 +64,17 @@ public class MainActivity extends AppCompatActivity
 
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(Integer.toString(TEST_ORDER_ID));
+        String title = "";
+        getSupportActionBar().setTitle(title);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+        // Init Analytics
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         mItemViewModel = ViewModelProviders.of(this, new CustomViewModelFactory(this.getApplication(), TEST_ORDER_ID)).get(ItemViewModel.class);
-
+        UpdateTitle();
+        //getSupportActionBar().setTitle(mCurrOrder.getOrderTitle());
 
         // Add Fragments
         fragmentManager = getSupportFragmentManager();
@@ -104,7 +84,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -113,14 +93,14 @@ public class MainActivity extends AppCompatActivity
         // start with drawer open
         //drawer.openDrawer(GravityCompat.START);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -139,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 
          */
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.search_items)
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_items)
                 .getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
@@ -226,7 +206,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -236,11 +216,18 @@ public class MainActivity extends AppCompatActivity
             swapFragments(FRAGMENT_SELECT_ORDER);
         } else if (id == R.id.nav_zero) {
             mItemViewModel.zeroDatabase(TEST_ORDER_ID);
+            // Does anybody zero database?
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ZERO_DATABASE");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Zero Button");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Inventory Button");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         } else if (id == R.id.nav_export) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -286,6 +273,7 @@ public class MainActivity extends AppCompatActivity
         //swapFragments(FRAGMENT_CONTENT_MAIN);
         //clearStack();
         mItemViewModel.setOrderId(TEST_ORDER_ID);
+        UpdateTitle();
         this.recreate();
     }
 
@@ -296,13 +284,13 @@ public class MainActivity extends AppCompatActivity
         Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
         if(destinationFragment == null) {
             // create desired fragment
-            if(swap_to_key == FRAGMENT_CONTENT_MAIN) {
+            if(swap_to_key.equals(FRAGMENT_CONTENT_MAIN)) {
                 destinationFragment = ContentMainFragment.newInstance(TEST_ORDER_ID);
-            } else if(swap_to_key == FRAGMENT_EDIT_ITEM) {
+            } else if(swap_to_key.equals(FRAGMENT_EDIT_ITEM)) {
                 destinationFragment = new EditItemFragment();
-            } else if(swap_to_key == FRAGMENT_EDIT_ORDER) {
+            } else if(swap_to_key.equals(FRAGMENT_EDIT_ORDER)) {
                 destinationFragment = new EditOrderFragment();
-            }  else if(swap_to_key == FRAGMENT_SELECT_ORDER) {
+            }  else if(swap_to_key.equals(FRAGMENT_SELECT_ORDER)) {
                 destinationFragment = new SelectOrderFragment();
             }
 
@@ -327,6 +315,20 @@ public class MainActivity extends AppCompatActivity
     public void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         TEST_ORDER_ID = state.getInt(ORDER_ID);
+    }
+
+    public void UpdateTitle() {
+
+        mItemViewModel.getOrderById(TEST_ORDER_ID).observe(this, new Observer<Order>() {
+            @Override
+            public void onChanged(@Nullable Order order) {
+                mCurrOrder = order;
+                if( order != null) {
+                    getSupportActionBar().setTitle(order.getOrderTitle());
+                }
+            }
+        });
+
     }
 
 }

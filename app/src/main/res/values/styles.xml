@@ -7,6 +7,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+
+        <item name="android:listPreferredItemPaddingEnd">2dp</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">

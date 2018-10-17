@@ -23,6 +23,9 @@ public class Order {
     public int getOrderID() { return orderID;}
     public String getOrderDate() { return orderDate; }
     public String getOrderName() { return orderName; }
+    public String getOrderTitle() {
+        return (orderName == "") ? orderDate : orderName;
+    }
 
     public void setOrderID(int id) { orderID = id; }
     public void setOrderDate(String dateStr) { orderDate = dateStr; }

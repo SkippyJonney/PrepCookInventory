@@ -49,6 +49,8 @@ public class ItemRepository {
         new insertAsyncTask(mItemDao).execute(item);
     }
     public void insertOrder(Order order) { new insertAsyncOrder(mOrderDao).execute(order); }
+    LiveData<Order> getOrderById(int id) { return mOrderDao.getById(id); }
+
 
     // Async to Update quantity
     private static class updateQuantityAsyncTask extends AsyncTask<Integer, Void, Void> {

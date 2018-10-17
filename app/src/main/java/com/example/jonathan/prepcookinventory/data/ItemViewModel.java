@@ -45,6 +45,8 @@ public class ItemViewModel extends AndroidViewModel {
 
     public LiveData<List<Order>> getmOrders() { return mOrders; }
 
+    public LiveData<Order> getOrderById(int id) { return mRepository.getOrderById(id); }
+
     // call repository insert wrapper
     public void insert(Item item) { mRepository.insert(item); }
     public void insert(Order order) { mRepository.insertOrder(order); }
