@@ -296,8 +296,9 @@ public class MainActivity extends AppCompatActivity
     // Swap Fragments in View & Check for Existing Fragment
     public void swapFragments(String swap_to_key) {
 
-        Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
-        if(destinationFragment == null) {
+        //Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
+        Fragment destinationFragment = new Fragment();
+        //if(destinationFragment == null) {
             // create desired fragment
             if(swap_to_key.equals(FRAGMENT_CONTENT_MAIN)) {
                 destinationFragment = ContentMainFragment.newInstance(TEST_ORDER_ID);
@@ -308,8 +309,7 @@ public class MainActivity extends AppCompatActivity
             }  else if(swap_to_key.equals(FRAGMENT_SELECT_ORDER)) {
                 destinationFragment = new SelectOrderFragment();
             }
-
-        }
+        //}
         fragmentManager.beginTransaction()
                 .replace(R.id.main_framgent, destinationFragment, swap_to_key)
                 .addToBackStack(null)

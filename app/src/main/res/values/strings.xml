@@ -6,7 +6,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Prep-Cook Inventory</string>
-    <string name="nav_header_subtitle">Inventory Managment Solutions</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -49,7 +48,10 @@
     <string name="widget_name">Inventory Widget</string>
 
     <!-- Editor Strings -->
-    <string name="NA">N/A</string>
+    <string name="NA">Data not Ready</string>
+    <string name="plus">+</string>
+    <string name="zero">0</string>
+    <string name="minus">-</string>
 
 
 </resources>

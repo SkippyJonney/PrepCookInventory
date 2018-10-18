@@ -3,7 +3,7 @@ package com.example.jonathan.prepcookinventory.data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import java.util.Date;
+import java.util.Objects;
 
 @Entity(tableName = "order_table")
 public class Order {
@@ -30,7 +30,7 @@ public class Order {
     public String getOrderDate() { return orderDate; }
     public String getOrderName() { return orderName; }
     public String getOrderTitle() {
-        return (orderName == "") ? orderDate : orderName;
+        return (Objects.equals(orderName, "")) ? orderDate : orderName;
     }
 
     public void setOrderID(int id) { orderID = id; }

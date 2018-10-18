@@ -6,6 +6,6 @@ public interface OnFragmentActionListener {
 
     //public void onFragmentMessage(String TAG, Object data);
 
-    public void fragmentButtons(String action, @Nullable String[] data);
+    void fragmentButtons(String action, @Nullable String[] data);
 
 }

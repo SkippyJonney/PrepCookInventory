@@ -4,10 +4,8 @@ package com.example.jonathan.prepcookinventory.data;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  *  REPOSITORY - NOT BEING USED -- :)

@@ -3,8 +3,6 @@ package com.example.jonathan.prepcookinventory.data;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 
 import com.example.jonathan.prepcookinventory.data.Item;
 import com.example.jonathan.prepcookinventory.data.ItemRepository;
@@ -21,7 +19,7 @@ public class ItemViewModel extends AndroidViewModel {
     private List<Item> mItemsExport;
     private LiveData<List<Order>> mOrders;
 
-    private int mORDER_ID = 0;
+    private int mORDER_ID;
 
 
     public ItemViewModel (Application application, int orderID) {

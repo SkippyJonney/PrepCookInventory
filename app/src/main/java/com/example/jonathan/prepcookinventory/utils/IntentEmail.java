@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.example.jonathan.prepcookinventory.R;
 
 import java.io.File;
-import java.net.URI;
 
 public class IntentEmail {
     public IntentEmail(Context context) { this.context = context; }

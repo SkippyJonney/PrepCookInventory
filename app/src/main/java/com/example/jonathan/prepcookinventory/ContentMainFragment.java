@@ -101,8 +101,8 @@ public class ContentMainFragment extends Fragment implements AdapterView.OnItemS
 
         // Inflate locationSpinner
         spinnerContainer = view.findViewById(R.id.spinner_container);
-        locationSpinner = (Spinner) view.findViewById(R.id.location_spinner);
-        categorySpinner = (Spinner) view.findViewById(R.id.category_spinner);
+        locationSpinner = view.findViewById(R.id.location_spinner);
+        categorySpinner = view.findViewById(R.id.category_spinner);
         //String animalList[] = {"Lion","Tiger","Monkey","Elephant","Dog","Cat","Camel"};
         //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, animalList);
         //locationSpinner.setAdapter(arrayAdapter);
@@ -115,7 +115,7 @@ public class ContentMainFragment extends Fragment implements AdapterView.OnItemS
                 for(String str : locations) {  if(!mLocations.contains(str)) { mLocations.add(str);  } } }
         });
 
-        ArrayAdapter<String> adapterLocations = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, mLocations);
+        ArrayAdapter<String> adapterLocations = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, mLocations);
         locationSpinner.setAdapter(adapterLocations);
         locationSpinner.setOnItemSelectedListener(this);
 
@@ -193,6 +193,6 @@ public class ContentMainFragment extends Fragment implements AdapterView.OnItemS
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         adapter.getFilter().filter("filter");
-    };
+    }
 
 }

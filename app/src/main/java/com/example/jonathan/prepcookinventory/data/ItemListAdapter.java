@@ -1,6 +1,7 @@
 package com.example.jonathan.prepcookinventory.data;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.jonathan.prepcookinventory.R;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,14 +70,15 @@ public class ItemListAdapter
         mCategories = new ArrayList<>();
     }
 
+    @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
         return new ItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         if(mItemsFiltered != null) {
             Item current = mItemsFiltered.get(position);
             holder.tv_name.setText(current.getName());
@@ -87,7 +88,7 @@ public class ItemListAdapter
             holder.quantity = current.getQuantity();
         } else {
             // data not ready
-            holder.tv_name.setText("No Item");
+            holder.tv_name.setText(R.string.NA);
         }
     }
 

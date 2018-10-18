@@ -25,11 +25,21 @@
     <!-- Using Fragments
     <include layout="@layout/fragment_content_main" />
     -->
-    <fragment
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:weightSum="1">
 
-        android:layout_height="match_parent"
-        android:id="@+id/main_framgent"
-        android:name="com.example.jonathan.prepcookinventory.ContentMainFragment" />
+        <fragment
+            android:layout_width="0dp"
+            android:layout_weight=".6"
+            android:layout_height="match_parent"
+            android:id="@+id/main_framgent"
+            android:name="com.example.jonathan.prepcookinventory.ContentMainFragment" />
+
+
+    </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

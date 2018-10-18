@@ -1,6 +1,5 @@
 package com.example.jonathan.prepcookinventory.utils;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 
 import com.example.jonathan.prepcookinventory.data.Item;

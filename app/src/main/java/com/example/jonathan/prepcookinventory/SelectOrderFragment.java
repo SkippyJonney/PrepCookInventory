@@ -1,10 +1,10 @@
 package com.example.jonathan.prepcookinventory;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +19,7 @@ import com.example.jonathan.prepcookinventory.data.Order;
 import com.example.jonathan.prepcookinventory.ui.OrderListAdapter;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +59,7 @@ public class SelectOrderFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
@@ -117,7 +118,7 @@ public class SelectOrderFragment extends Fragment {
 
     // Populate data with observer
     private void populateAdapter() {
-        mItemViewModel = ViewModelProviders.of(this.getActivity()).get(ItemViewModel.class);
+        mItemViewModel = ViewModelProviders.of(Objects.requireNonNull(this.getActivity())).get(ItemViewModel.class);
         mItemViewModel.getmOrders().observe(this, new Observer<List<Order>>() {
             @Override
             public void onChanged(@Nullable List<Order> orders) {

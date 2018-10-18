@@ -9,8 +9,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.Date;
-
 @Database(entities = {Item.class, Order.class}, version = 4, exportSchema = false)
 public abstract class ItemRoomDatabase extends RoomDatabase {
     public abstract ItemDao itemDao();

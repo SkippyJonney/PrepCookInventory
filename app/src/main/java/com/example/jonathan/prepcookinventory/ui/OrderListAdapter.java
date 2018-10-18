@@ -1,6 +1,7 @@
 package com.example.jonathan.prepcookinventory.ui;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,15 +31,16 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_orders, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mDate.setText(mValues.get(position).getOrderDate());
         holder.mName.setText(mValues.get(position).getOrderName());
@@ -69,8 +71,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.View
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mDate = (TextView) view.findViewById(R.id.order_date);
-            mName = (TextView) view.findViewById(R.id.order_name);
+            mDate = view.findViewById(R.id.order_date);
+            mName = view.findViewById(R.id.order_name);
         }
 
         @Override

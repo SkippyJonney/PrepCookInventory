@@ -15,9 +15,6 @@ import android.widget.EditText;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-
-import java.util.Date;
 
 public class EditOrderFragment extends Fragment {
     public EditOrderFragment() {}
