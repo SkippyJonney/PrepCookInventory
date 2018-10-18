@@ -75,6 +75,8 @@ public abstract class ItemRoomDatabase extends RoomDatabase {
 
             Order order = new Order("1/12/2018","FirstOrder");
             mOrder.insert(order);
+            order = new Order(725, "12/1/2018", "Test Order");
+            mOrder.insert(order);
 
             return null;
 

@@ -20,6 +20,12 @@ public class Order {
         this.orderName = orderName;
     }
 
+    public Order(int orderID, String orderDate, String orderName) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.orderName = orderName;
+    }
+
     public int getOrderID() { return orderID;}
     public String getOrderDate() { return orderDate; }
     public String getOrderName() { return orderName; }

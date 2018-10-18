@@ -15,3 +15,6 @@ https://stackoverflow.com/questions/46283981/android-viewmodel-additional-argume
 
 Clear Fragment Backstack
 https://readyandroid.wordpress.com/remove-fragment-with-clear-back-stack/
+
+FileProvider
+https://proandroiddev.com/sharing-files-though-intents-are-you-ready-for-nougat-70f7e9294a0b

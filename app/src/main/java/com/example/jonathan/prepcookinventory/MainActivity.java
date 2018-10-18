@@ -31,8 +31,7 @@ import com.example.jonathan.prepcookinventory.data.Order;
 import com.example.jonathan.prepcookinventory.ui.InventoryWidget;
 import com.example.jonathan.prepcookinventory.ui.OnFragmentActionListener;
 import com.example.jonathan.prepcookinventory.utils.CVShelper;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.example.jonathan.prepcookinventory.utils.IntentEmail;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String title = "";
+        String title = "Test Inventory";
         getSupportActionBar().setTitle(title);
 
         // Init Analytics
@@ -239,6 +238,8 @@ public class MainActivity extends AppCompatActivity
             CVShelper helper = new CVShelper(this, mItemViewModel.exportItems(), mItemViewModel.exportOrders());
             File file = helper.getCvsExport();
             Log.d("RV", file.toString());
+            IntentEmail email = new IntentEmail(this);
+            email.SendEmail(file);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -308,7 +309,6 @@ public class MainActivity extends AppCompatActivity
                 destinationFragment = new SelectOrderFragment();
             }
 
-            // TODO ENSURE NO NULL FRAGMENT
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.main_framgent, destinationFragment, swap_to_key)

@@ -1,4 +1,7 @@
 <resources>
+    // Content Provider Authority
+    <string name="file_provider_authority">com.jonathan.example.prepcookinventory.fileprovider</string>
+
     <string name="app_name">PrepCookInventory</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
