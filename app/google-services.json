@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "829533090076",
+    "firebase_url": "https://prepcookinventory.firebaseio.com",
+    "project_id": "prepcookinventory",
+    "storage_bucket": "prepcookinventory.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829533090076:android:033dcfc01c7fa91d",
+        "android_client_info": {
+          "package_name": "com.example.jonathan.prepcookinventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829533090076-8dc7d8ung419876idh9dvloh8g3u16eg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhW5fv-2TVDgW4PYrOu6iAOOZcPhMWubA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

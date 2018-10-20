@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     private String FRAGMENT_CONTENT_MAIN="10";
     private String FRAGMENT_EDIT_ORDER="42";
     private String FRAGMENT_SELECT_ORDER="20";
+    private String CURRENT_VIEW;
+    private String VIEW_KEY = "123";
 
     // Recycler View
     private ItemViewModel mItemViewModel;
@@ -70,14 +72,18 @@ public class MainActivity extends AppCompatActivity
         // Get Order ID
         if(savedInstanceState != null) {
             TEST_ORDER_ID = savedInstanceState.getInt(ORDER_ID);
+            CURRENT_VIEW = savedInstanceState.getString(VIEW_KEY);
+            if (CURRENT_VIEW.isEmpty()) {
+                swapFragments(CURRENT_VIEW);
+            }
         }
 
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String title = "Test Inventory";
-        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setTitle(getString(R.string.test_name));
+        updateWidget(getString(R.string.test_name));
 
         // Init Analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -93,6 +99,8 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .add(R.id.main_framgent, contentMainFragment, FRAGMENT_CONTENT_MAIN)
                 .commit();
+        // Set current Fragment
+        CURRENT_VIEW = FRAGMENT_CONTENT_MAIN;
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -288,17 +296,20 @@ public class MainActivity extends AppCompatActivity
         //swapFragments(FRAGMENT_CONTENT_MAIN);
         //clearStack();
         mItemViewModel.setOrderId(TEST_ORDER_ID);
+
+        //this.recreate();
+        swapFragments(FRAGMENT_CONTENT_MAIN);
         UpdateTitle();
-        this.recreate();
     }
 
 
     // Swap Fragments in View & Check for Existing Fragment
     public void swapFragments(String swap_to_key) {
 
-        //Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
-        Fragment destinationFragment = new Fragment();
-        //if(destinationFragment == null) {
+        Fragment destinationFragment = fragmentManager.findFragmentByTag(swap_to_key);
+        //Fragment destinationFragment = new Fragment();
+
+        if(destinationFragment == null) {
             // create desired fragment
             if(swap_to_key.equals(FRAGMENT_CONTENT_MAIN)) {
                 destinationFragment = ContentMainFragment.newInstance(TEST_ORDER_ID);
@@ -309,13 +320,12 @@ public class MainActivity extends AppCompatActivity
             }  else if(swap_to_key.equals(FRAGMENT_SELECT_ORDER)) {
                 destinationFragment = new SelectOrderFragment();
             }
-        //}
+        }
         fragmentManager.beginTransaction()
                 .replace(R.id.main_framgent, destinationFragment, swap_to_key)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
-
-
+        CURRENT_VIEW = swap_to_key;
     }
 
     // Save and Restore Order ID
@@ -323,12 +333,15 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         state.putInt(ORDER_ID,TEST_ORDER_ID);
+        state.putString(VIEW_KEY,CURRENT_VIEW);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
         TEST_ORDER_ID = state.getInt(ORDER_ID);
+        CURRENT_VIEW = state.getString(VIEW_KEY);
+        swapFragments(CURRENT_VIEW);
     }
 
     public void UpdateTitle() {
