@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'udacityKey'
+            keyPassword 'udacity'
+            storeFile file('C:/Users/Jonathan/StudioProjects/PrepCookInventory/keystore.jks')
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.jonathan.prepcookinventory"
@@ -15,12 +23,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
@@ -31,11 +40,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     // Firebase Analytics
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.android.gms:play-services-ads:16.0.0'
-
     // Room Includes
     implementation 'android.arch.persistence.room:runtime:1.1.1'
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
@@ -43,10 +50,8 @@ dependencies {
     // Room --> Lifecycle
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
-
     // CVS File Creator/Reader
     implementation 'de.siegmar:fastcsv:1.0.3'
-
 }
 
 apply plugin: 'com.google.gms.google-services'

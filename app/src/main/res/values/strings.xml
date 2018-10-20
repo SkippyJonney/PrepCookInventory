@@ -47,6 +47,7 @@
     <!-- App Widget -->
     <string name="widget_name">Inventory Widget</string>
     <string name="test_name">Test Inventory</string>
+    <string name="widget_title">Current Inventory</string>
 
     <!-- Editor Strings -->
     <string name="NA">Data not Ready</string>
